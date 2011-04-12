@@ -34,11 +34,19 @@ class Yelp
       # if they specified anything other than a json variant, we
       # need to tell yelp what we're looking for
       case @response_format
-      when Yelp::ResponseFormat::PICKLE: params[:output] = 'pickle'
-      when Yelp::ResponseFormat::PHP: params[:output] = 'php'
+      when Yelp::ResponseFormat::PICKLE 
+        params[:output] = 'pickle'
+      when Yelp::ResponseFormat::PHP 
+        params[:output] = 'php'
       end
 
       params
     end
+    
+    def to_yelp_params_v2
+      #derived classes should override this if their parameters
+      #are different for the v2 API
+    end
+    
   end
 end

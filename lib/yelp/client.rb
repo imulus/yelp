@@ -1,7 +1,6 @@
 require 'cgi'
 require 'logger'
 require 'open-uri'
-require 'rubygems'
 require 'json'
 require 'yaml'
 require 'zlib'

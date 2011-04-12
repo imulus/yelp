@@ -8,6 +8,25 @@ module YelpHelper
     @yws_id = ENV['YWSID']
 #    @client.debug = true
   end
+  
+  def create_v2_client
+    
+    assert_not_nil(ENV['YELP_CONSUMER_KEY'], "Missing consumer key.  Obtain from http://www.yelp.com/developer and " +
+                   "set in your shell environment under 'YELP_CONSUMER_KEY'.")
+    assert_not_nil(ENV['YELP_CONSUMER_SECRET'], "Missing consumer secret.  Obtain from http://www.yelp.com/developer and " +
+                         "set in your shell environment under 'YELP_CONSUMER_SECRET'.")
+    assert_not_nil(ENV['YELP_TOKEN'], "Missing OAuth token.  Obtain from http://www.yelp.com/developer and " +
+                                              "set in your shell environment under 'YELP_TOKEN'.")
+    assert_not_nil(ENV['YELP_TOKEN_SECRET'], "Missing OAuth token secret.  Obtain from http://www.yelp.com/developer and " +
+                                        "set in your shell environment under 'YELP_TOKEN_SECRET'.")
+                   
+    @client = Yelp::V2::Client.new(
+      :consumer_key => ENV['YELP_CONSUMER_KEY'],
+      :consumer_secret => ENV['YELP_CONSUMER_SECRET'],
+      :token => ENV['YELP_TOKEN'],
+      :token_secret => ENV['YELP_TOKEN_SECRET']
+    )
+  end
 
   def validate_json_response (response)
     assert_not_nil response
