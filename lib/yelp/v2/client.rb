@@ -42,26 +42,33 @@ class Yelp
       # the format specified by the request.
       #
       def search (request)
-        # build the full set of hash params with which the url is constructed
-        params = request.to_yelp_params
-    
-        # construct the url with which we obtain results
-        url = build_url('/v2/search', params)
-        puts url
+
+        url = nil
+        
+        #if this is a business request then just tack on the yelp_id
+        if(request.is_a? Yelp::V2::Business::Request)
+          url = request.base_url + "/" + request.yelp_id
+        else #otherwise just build the parameters normally
+          # build the full set of hash params with which the url is constructed
+          params = request.to_yelp_params
+          
+          # construct the url with which we obtain results
+          url = build_url('/v2/search', params)
+          
+        end
+        
         debug_msg "submitting search [url=#{url}, request=#{request.to_yaml}]."
-     
+        
         consumer = OAuth::Consumer.new(@consumer_key, @consumer_secret, {:site => "http://api.yelp.com"})
         access_token = OAuth::AccessToken.new(consumer, @token, @token_secret)
         
-        puts consumer
-        puts access_token
-    
         # read the response content
         content = access_token.get(url).body
         debug_msg((request.response_format.serialized?) ? "received response [content_length=#{content.length}]." : "received response [content_length=#{content.length}, content=#{content}].")
-    
+        
         # format the output as specified in the request
         format_content(request.response_format, content)
+        
       end
     end
   end
